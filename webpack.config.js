@@ -29,6 +29,10 @@ module.exports = {
     module: {  
         rules: [
             {
+                test: /\.ico$/i,
+                type: 'asset/resource'
+            },
+            {
                 test: /\.scss$/,   
                 use: ['style-loader', 'css-loader', 'sass-loader']
             }, 
@@ -52,7 +56,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'Color Suggester',
             filename: 'index.html',
-            template: 'src/template.html'
+            template: 'src/template.html',
+            favicon: './src/img/favicon.ico'
         }),
         // new BundleAnalyzerPlugin()
     ]

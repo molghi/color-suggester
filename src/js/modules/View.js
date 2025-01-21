@@ -1,6 +1,6 @@
 class View {
     constructor() {
-        console.log(`hello from View`)
+        // console.log(`hello from View`)
     }
 
     render() {}

@@ -12,7 +12,7 @@ function init() {
     const Logic = new Model()
     const Visual = new View()
     
-    console.log(`hello from Controller`)
+    // console.log(`hello from Controller`)
     
 }
 init()

@@ -1,7 +1,7 @@
 class Model {
     #state = {}
     constructor() {
-        console.log(`hello from Model`)
+        // console.log(`hello from Model`)
     }
 }
 
