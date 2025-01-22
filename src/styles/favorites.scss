@@ -1,0 +1,13 @@
+.favorite {
+    &__title {
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
+
+    &__colors {
+        display: flex;
+        column-gap: 25px;
+        row-gap: 40px;
+        flex-wrap: wrap;
+    }
+}

@@ -17,6 +17,7 @@ const Visual = new View();
 // runs upon page refresh
 function init() {
     Visual.focusInput();
+    Logic.getFavColors();
     runEventListeners();
 }
 init();
@@ -27,6 +28,7 @@ init();
 function runEventListeners() {
     Visual.handleFormSubmit(onFormSubmit);
     Visual.handleFormBtns(formBtnsHandler);
+    Visual.handleMarkingFavorite(markFavorite);
 }
 
 // ================================================================================================
@@ -181,8 +183,33 @@ function showRandomColors() {
 // ================================================================================================
 
 function showFavoriteColors() {
-    // do what?
-    // first such must be added to LS and state...
+    // do what? -- display another block where I render all of those colors
+
+    if (document.querySelector(".saved-colors")) document.querySelector(".saved-colors").remove();
+
+    const div = document.createElement("div");
+    div.classList.add("saved-colors");
+
+    const savedColors = Logic.getSavedColors();
+
+    if (savedColors.length === 0 || !savedColors) return;
+    const savedColorsRGBs = savedColors.map((col) => Logic.convertToRgb(col));
+
+    // rendering:
+    const parentEl = document.querySelector(".favorite__colors");
+    savedColors.forEach((colHex, i) => Visual.renderColorElement(undefined, colHex, savedColorsRGBs[i], parentEl));
+
+    // unhiding the section
+    document.querySelector(".favorite").classList.remove("hidden");
+
+    // document.querySelector(".container").appendChild(div);
+}
+
+// ================================================================================================
+
+function markFavorite(hexString) {
+    console.log(hexString);
+    Logic.pushNewFavColor(hexString); // pushing to state and LS
 }
 
 // ================================================================================================

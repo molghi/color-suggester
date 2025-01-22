@@ -31,6 +31,7 @@ function renderColorElement(htmlColor, hexColor, rgbColor, parentEl) {
 
     const div = document.createElement("div");
     div.classList.add("result");
+    div.setAttribute("data-hex", hex);
     div.innerHTML = `<div style="background-color: ${hex}; box-shadow: 0 0 10px ${hex};" class="result__color-box"></div>
                 <div class="result__color-info">
                     ${colorEl}

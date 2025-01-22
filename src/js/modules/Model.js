@@ -3,6 +3,7 @@ import htmlColors from "./model-dependencies/HTML_colors.js";
 class Model {
     #state = {
         usualColorNames: ["gray", "rose", "peach", "bronze", "amber", "rust"],
+        savedColors: [],
     };
     constructor() {
         // console.log(this.getSimilarHtmlColors("coral"));
@@ -10,8 +11,31 @@ class Model {
 
     // ================================================================================================
 
+    getFavColors() {
+        const unparsed = localStorage.getItem("savedColors");
+        const parsed = JSON.parse(unparsed);
+        if (!parsed) return;
+        parsed.forEach((favCol) => this.#state.savedColors.push(favCol));
+        console.log(`Logic.#state.savedColors:`, this.#state.savedColors);
+    }
+
+    // ================================================================================================
+
+    pushNewFavColor(hexString) {
+        this.#state.savedColors.push(hexString);
+        localStorage.setItem("savedColors", JSON.stringify(this.#state.savedColors));
+    }
+
+    // ================================================================================================
+
     getState() {
         return this.#state;
+    }
+
+    // ================================================================================================
+
+    getSavedColors() {
+        return this.#state.savedColors;
     }
 
     // ================================================================================================

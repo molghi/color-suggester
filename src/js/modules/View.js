@@ -1,4 +1,4 @@
-import { handleFormSubmit, handleFormBtns } from "./view-dependencies/eventHandlers.js";
+import { handleFormSubmit, handleFormBtns, handleMarkingFavorite } from "./view-dependencies/eventHandlers.js";
 import { showError, renderColorElement } from "./view-dependencies/renderMethods.js";
 
 class View {
@@ -13,6 +13,7 @@ class View {
         this.combosSection = document.querySelector(".combos");
         this.allResultBoxes = document.querySelectorAll(".results__items-box");
         this.formBtnsBox = document.querySelector(".form__btns");
+        // this.shadesResultsBox = document.querySelector(".shades .results__items-box");
     }
 
     // ================================================================================================
@@ -72,6 +73,12 @@ class View {
 
     handleFormBtns(handler) {
         handleFormBtns(handler);
+    }
+
+    // ================================================================================================
+
+    handleMarkingFavorite(handler) {
+        handleMarkingFavorite(handler);
     }
 
     // ================================================================================================
