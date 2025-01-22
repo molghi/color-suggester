@@ -26,6 +26,7 @@ init();
 // running event listeners
 function runEventListeners() {
     Visual.handleFormSubmit(onFormSubmit);
+    Visual.handleFormBtns(formBtnsHandler);
 }
 
 // ================================================================================================
@@ -138,6 +139,50 @@ function processRgbColor(inputValue) {
     const similarColorsHex = similarRgbColors.map((rgbCol) => Logic.convertToHex(rgbCol)); // getting their hex
     // rendering:
     similarRgbColors.forEach((rgbCol, i) => Visual.renderColorElement(undefined, similarColorsHex[i], rgbCol, parentEl));
+}
+
+// ================================================================================================
+
+function formBtnsHandler(btnType) {
+    if (btnType === "random") {
+        console.log(`show random colors`);
+        showRandomColors();
+    }
+    if (btnType === "faves") {
+        console.log(`show favourite colours`);
+        showFavoriteColors();
+    }
+}
+
+// ================================================================================================
+
+function showRandomColors() {
+    // generating 21 random color: hex and rgb
+    Visual.clearResults(); // clearing all results in Shades and Combos first
+    const parentEl = document.querySelector(".shades .results__items-box"); // getting the ref to the parent el
+    Visual.revealSection(parentEl); // unhiding 'Shades' or 'Combos' section, it is hidden by default
+
+    const amountOfColors = 21;
+    const colors = [];
+
+    // generating and populating 'colors'
+    for (let i = 0; i < amountOfColors; i++) {
+        const rgb = Logic.getRandomRGBColor();
+        const hex = Logic.convertToHex(rgb);
+        colors.push([hex, rgb]);
+    }
+
+    console.log(colors);
+
+    // rendering
+    colors.forEach((curColArr, i, arr) => Visual.renderColorElement(undefined, curColArr[0], curColArr[1], parentEl));
+}
+
+// ================================================================================================
+
+function showFavoriteColors() {
+    // do what?
+    // first such must be added to LS and state...
 }
 
 // ================================================================================================

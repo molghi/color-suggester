@@ -164,6 +164,19 @@ class Model {
     }
 
     // ================================================================================================
+
+    // returns a string
+    getRandomRGBColor() {
+        const r = Math.floor(Math.random() * 256);
+        const g = Math.floor(Math.random() * 256);
+        const b = Math.floor(Math.random() * 256);
+        // Math.random(): Generates a random number between 0 and 1.
+        // Math.random() * 256: Scales the random number to the range 0-255 (inclusive).
+        // Math.floor(): Rounds down to the nearest integer.
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // ================================================================================================
 }
 
 export default Model;

@@ -4,10 +4,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
         <link rel="icon" href="./favicon.ico" type="image/x-icon" />
         <title><%= htmlWebpackPlugin.options.title %></title>
     </head>
@@ -23,20 +20,14 @@
                                 type="text"
                                 name="color-input"
                                 class="form__input"
-                                placeholder="Input your colour: 'grey', '#808080' or 'rgb(128, 128, 128)'"
+                                placeholder="Type your colour: 'grey', '#808080' or 'rgb(128, 128, 128)'"
                                 autocomplete="off"
                             />
-                            <button class="form__btn form__btn--get">
-                                Get
-                            </button>
+                            <button class="form__btn form__btn--get" type="submit">Get</button>
                         </div>
                         <div class="form__btns">
-                            <button class="form__btn form__btn--random">
-                                Random Colour
-                            </button>
-                            <button class="form__btn form__btn--faves">
-                                View Favourites
-                            </button>
+                            <button class="form__btn form__btn--random" type="button">Random Colours</button>
+                            <button class="form__btn form__btn--faves" type="button">View Favourites</button>
                         </div>
                     </form>
                 </div>
@@ -49,9 +40,7 @@
                     </div>
 
                     <div class="results__box combos hidden">
-                        <div class="results__box-title">
-                            Harmonious Combinations:
-                        </div>
+                        <div class="results__box-title">Harmonious Combinations:</div>
 
                         <div class="results__items-box"></div>
                     </div>

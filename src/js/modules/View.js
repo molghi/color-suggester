@@ -1,8 +1,5 @@
-import { handleFormSubmit } from "./view-dependencies/eventHandlers.js";
-import {
-    showError,
-    renderColorElement,
-} from "./view-dependencies/renderMethods.js";
+import { handleFormSubmit, handleFormBtns } from "./view-dependencies/eventHandlers.js";
+import { showError, renderColorElement } from "./view-dependencies/renderMethods.js";
 
 class View {
     constructor() {
@@ -15,6 +12,7 @@ class View {
         this.shadesSection = document.querySelector(".shades");
         this.combosSection = document.querySelector(".combos");
         this.allResultBoxes = document.querySelectorAll(".results__items-box");
+        this.formBtnsBox = document.querySelector(".form__btns");
     }
 
     // ================================================================================================
@@ -38,8 +36,7 @@ class View {
     // ================================================================================================
 
     removeErrorMsgs() {
-        if (document.querySelector(".error"))
-            document.querySelector(".error").remove();
+        if (document.querySelector(".error")) document.querySelector(".error").remove();
     }
 
     // ================================================================================================
@@ -67,9 +64,14 @@ class View {
 
     clearResults() {
         this.allResultBoxes.forEach((resultBox) => {
-            while (resultBox.firstElementChild)
-                resultBox.removeChild(resultBox.firstElementChild);
+            while (resultBox.firstElementChild) resultBox.removeChild(resultBox.firstElementChild);
         });
+    }
+
+    // ================================================================================================
+
+    handleFormBtns(handler) {
+        handleFormBtns(handler);
     }
 
     // ================================================================================================
