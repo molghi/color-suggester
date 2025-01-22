@@ -1,48 +1,51 @@
 @use './initial';
 
 .form {
-    text-align: center;
-    max-width: 500px;
-    margin: 0 auto 50px;
+  text-align: center;
+  max-width: 625px;
+  margin: 0 auto 50px;
 
-    &__form {
-        width: 100%;
+  &__form {
+    width: 100%;
+  }
+
+  &__input-box {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+  }
+
+  &__input {
+    width: 100%;
+
+    &::placeholder {
+      opacity: 0.5;
+      transition: all 0.3s;
     }
+  }
 
-    &__input-box {
-        display: flex;
-        align-items: center;
-        column-gap: 15px;
+  &__btns {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 50px;
+  }
+
+  &__btn {
+    padding: 10px 15px;
+
+    &:active {
+      opacity: 0.7;
     }
+  }
 
-    &__input {
-        width: 100%;
+  &__btn--get {
+  }
 
-        &::placeholder {
-            opacity: 0.5;
-            transition: all .3s;
-        }
-    }
+  &__btn--random {
+  }
 
-    &__btns {
-        margin-top: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        column-gap: 50px;
-    }
-
-    &__btn {
-        padding: 10px 15px;
-
-        &:active {
-            opacity: 0.7;
-        }
-    }
-
-    &__btn--get {}
-
-    &__btn--random {}
-
-    &__btn--faves {}
+  &__btn--faves {
+  }
 }

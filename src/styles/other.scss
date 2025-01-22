@@ -1,0 +1,33 @@
+@use "./initial";
+
+.message {
+}
+
+.error {
+    border: 2px solid red;
+    font-size: 18px;
+    box-shadow: 0 0 10px red;
+    padding: 30px;
+    color: red;
+
+    div {
+        span + span {
+            margin-top: 20px;
+        }
+        span {
+            display: block;
+            &:first-child {
+                font-size: 22px;
+            }
+            &:nth-child(3) {
+                color: var(--accent);
+            }
+        }
+    }
+}
+
+// ================================================================================================
+
+.hidden {
+    display: none;
+}
