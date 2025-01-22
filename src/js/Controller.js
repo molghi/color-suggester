@@ -49,12 +49,12 @@ function processCases(inputValue, isValidHtmlColor, errorText) {
         // likely HEX color
         const isValidHex = Logic.checkValidHex(inputValue);
         if (!isValidHex) return Visual.showError(errorText);
-        else console.log(`✅ it's a valid HEX color`);
+        else processHexColor(inputValue);
     } else if (inputValue.startsWith("rgb(")) {
         // likely RGB color
         const isValidRgb = Logic.checkValidRgb(inputValue);
         if (!isValidRgb) return Visual.showError(errorText);
-        else console.log(`✅ it's a valid RGB color`);
+        else processRgbColor(inputValue);
     } else if (isValidHtmlColor) {
         // is standard HTML color
         processHtmlColor(inputValue);
@@ -67,6 +67,7 @@ function processCases(inputValue, isValidHtmlColor, errorText) {
 
 // ================================================================================================
 
+// process the input that was one of HTML colors such as 'orange', 'cyan', 'lime', 'white', etc.
 function processHtmlColor(inputValue) {
     Visual.clearResults(); // clearing all results in Shades and Combos
     const parentEl = document.querySelector(".shades .results__items-box"); // getting the ref to the parent el
@@ -90,6 +91,53 @@ function processHtmlColor(inputValue) {
     similarColorsRgbAndHex.forEach((colorEntry, i) => {
         Visual.renderColorElement(undefined, similarColorsRgbAndHex[i][1], similarColorsRgbAndHex[i][0], parentEl); // rendering them
     });
+}
+
+// ================================================================================================
+
+// process the input that was a HEX color
+function processHexColor(inputValue) {
+    console.log(inputValue);
+    Visual.clearResults(); // clearing all results in Shades and Combos
+    const parentEl = document.querySelector(".shades .results__items-box"); // getting the ref to the parent el
+    Visual.revealSection(parentEl); // unhiding 'Shades' or 'Combos' section, it is hidden by default
+
+    // rendering this color: getting its rgb first
+    const thisColorRGB = Logic.convertToRgb(inputValue);
+    Visual.renderColorElement(undefined, inputValue.toUpperCase(), thisColorRGB, parentEl);
+
+    // rendering 20 similar colors
+    const similarRgbColors = Logic.getCloseRgbColors(thisColorRGB, 20); // getting their rgb
+    const similarColorsHex = similarRgbColors.map((rgbCol) => Logic.convertToHex(rgbCol)); // getting their hex
+    // rendering:
+    similarRgbColors.forEach((rgbCol, i) => Visual.renderColorElement(undefined, similarColorsHex[i], rgbCol, parentEl));
+}
+
+// ================================================================================================
+
+// process the input that was an RGB color    rgb(100,200,150)
+function processRgbColor(inputValue) {
+    // formatting it properly first:
+    const thisColorRgbValues = inputValue
+        .slice(4, -1)
+        .split(",")
+        .map((x) => x.trim())
+        .join(", ");
+    const thisColorRgbFormatted = `rgb(${thisColorRgbValues})`;
+
+    Visual.clearResults(); // clearing all results in Shades and Combos
+    const parentEl = document.querySelector(".shades .results__items-box"); // getting the ref to the parent el
+    Visual.revealSection(parentEl); // unhiding 'Shades' or 'Combos' section, it is hidden by default
+
+    // rendering this color: getting its hex first
+    const thisColorHex = Logic.convertToHex(thisColorRgbFormatted);
+    Visual.renderColorElement(undefined, thisColorHex, thisColorRgbFormatted, parentEl);
+
+    // rendering 20 similar colors
+    const similarRgbColors = Logic.getCloseRgbColors(thisColorRgbFormatted, 20); // getting their rgb
+    const similarColorsHex = similarRgbColors.map((rgbCol) => Logic.convertToHex(rgbCol)); // getting their hex
+    // rendering:
+    similarRgbColors.forEach((rgbCol, i) => Visual.renderColorElement(undefined, similarColorsHex[i], rgbCol, parentEl));
 }
 
 // ================================================================================================

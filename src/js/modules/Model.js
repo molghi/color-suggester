@@ -51,12 +51,12 @@ class Model {
 
     // ================================================================================================
 
-    // converting HTML color to RGB
-    convertToRgb(HTMLcolor) {
+    // converting color to RGB
+    convertToRgb(color) {
         // mimicking the DOM addition and reading the computed color
         const element = document.createElement("div");
         document.body.appendChild(element);
-        element.style.color = HTMLcolor;
+        element.style.color = color;
         const computedColor = window.getComputedStyle(element).color;
         document.body.removeChild(element);
         return computedColor;
@@ -108,9 +108,8 @@ class Model {
     // checking if the input was valid rgb color
     checkValidRgb(rgbString) {
         return (
-            /^rgb\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\s*\)$/.test(
-                rgbString
-            ) && rgbString.match(/\d+/g).every((num) => num >= 0 && num <= 255)
+            /^rgb\(\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\s*\)$/.test(rgbString) &&
+            rgbString.match(/\d+/g).every((num) => num >= 0 && num <= 255)
         );
         /* Explanation:
     Regular Expression:
@@ -137,7 +136,7 @@ class Model {
 
     // ================================================================================================
 
-    getCloseRgbColors(rgbColor) {
+    getCloseRgbColors(rgbColor, amount = 10) {
         const pureRgbValues = rgbColor
             .slice(4, -1)
             .split(",")
@@ -148,7 +147,7 @@ class Model {
             b: pureRgbValues[2],
         };
         const colors = [];
-        const amountOfColors = 10;
+        const amountOfColors = amount;
 
         // Generate 10 colours close to the original
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max); // Helper function to clamp the values within 0-255 range

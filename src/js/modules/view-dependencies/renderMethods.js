@@ -2,6 +2,7 @@ import { Visual } from "../../Controller.js";
 
 // ================================================================================================
 
+// rendering error
 function showError(text) {
     Visual.removeErrorMsgs(); // removing all error msgs first
     const div = document.createElement("div");
@@ -15,6 +16,7 @@ function showError(text) {
 
 // ================================================================================================
 
+// rendering one color element
 function renderColorElement(htmlColor, hexColor, rgbColor, parentEl) {
     let color = htmlColor;
     let hex = hexColor;
