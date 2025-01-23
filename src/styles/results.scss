@@ -5,8 +5,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    row-gap: 100px;
+
     &__box + &__box {
-        margin-top: 50px;
+        // margin-top: 90px;
     }
 
     &__items-box {
@@ -14,6 +16,12 @@
         column-gap: 25px;
         row-gap: 40px;
         flex-wrap: wrap;
+        @media (max-width: #{initial.$md3}px) {
+            justify-content: space-evenly;
+        }
+        @media (max-width: #{initial.$md4}px) {
+            column-gap: 0;
+        }
     }
 
     &__box {
@@ -24,6 +32,9 @@
         // flex: 1 1 100%;
         font-size: 22px;
         margin-bottom: 30px;
+        @media (max-width: #{initial.$md3}px) {
+            text-align: center;
+        }
     }
 }
 

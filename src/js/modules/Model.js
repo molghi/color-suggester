@@ -1,13 +1,21 @@
 import htmlColors from "./model-dependencies/HTML_colors.js";
+import { fetchColors } from "./model-dependencies/api.js";
 
 class Model {
     #state = {
         usualColorNames: ["gray", "rose", "peach", "bronze", "amber", "rust"],
         savedColors: [],
+        currentInput: "",
     };
     constructor() {
         // console.log(this.getSimilarHtmlColors("coral"));
     }
+
+    // ================================================================================================
+
+    setCurrentInput = (value) => (this.#state.currentInput = value);
+
+    getCurrentInput = () => this.#state.currentInput;
 
     // ================================================================================================
 
@@ -16,7 +24,7 @@ class Model {
         const parsed = JSON.parse(unparsed);
         if (!parsed) return;
         parsed.forEach((favCol) => this.#state.savedColors.push(favCol));
-        console.log(`Logic.#state.savedColors:`, this.#state.savedColors);
+        // console.log(`Logic.#state.savedColors:`, this.#state.savedColors);
     }
 
     // ================================================================================================
@@ -198,6 +206,24 @@ class Model {
         // Math.random() * 256: Scales the random number to the range 0-255 (inclusive).
         // Math.floor(): Rounds down to the nearest integer.
         return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // ================================================================================================
+
+    async fetchColors(hexOrRgbString, type, mode, resultsNum) {
+        const data = await fetchColors(hexOrRgbString, type, mode, resultsNum);
+        return data;
+    }
+
+    // ================================================================================================
+
+    filterApiResult(obj) {
+        const result = obj.colors.map((colorObj) => {
+            const hex = colorObj.hex.value;
+            const rgb = colorObj.rgb.value;
+            return [hex, rgb];
+        });
+        return result;
     }
 
     // ================================================================================================
