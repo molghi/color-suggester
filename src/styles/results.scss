@@ -67,9 +67,11 @@
         border-radius: 10px;
         margin-bottom: 20px;
         // border: 1px solid white;
+        transition: all 0.3s;
     }
 
     &__color-info {
+        transition: all 0.3s;
         div + div {
             margin-top: 8px;
         }
@@ -108,7 +110,11 @@
     }
 
     &:hover {
-        transform: scale(1.05);
+        // transform: scale(1.1);
+        // .result__color-info
+        .result__color-box {
+            transform: scale(1.15);
+        }
     }
 
     &__color-rgb {

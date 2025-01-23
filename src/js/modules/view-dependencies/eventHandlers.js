@@ -27,13 +27,11 @@ function handleFormBtns(handler) {
 
 // handle adding a color to Your Favorites
 function handleMarkingFavorite(handler) {
-    // Visual.shadesResultsBox
-    Visual.allResultBoxes.forEach((resultBox) => {
-        resultBox.addEventListener("click", (e) => {
-            if (!e.target.closest(".result__color-btn--save")) return;
-            const clickedElementHex = e.target.closest(".result").dataset.hex;
-            handler(clickedElementHex);
-        });
+    Visual.containerEl.addEventListener("click", (e) => {
+        if (!e.target.closest(".result__color-btn--save")) return;
+        const clickedElementHex = e.target.closest(".result").dataset.hex;
+        const result = e.target.closest(".result");
+        handler(clickedElementHex, result);
     });
 }
 

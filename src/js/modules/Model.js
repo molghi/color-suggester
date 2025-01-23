@@ -6,9 +6,10 @@ class Model {
         usualColorNames: ["gray", "rose", "peach", "bronze", "amber", "rust"],
         savedColors: [],
         currentInput: "",
+        htmlColorsAsRgb: {},
     };
     constructor() {
-        // console.log(this.getSimilarHtmlColors("coral"));
+        this.convertHtmlColors();
     }
 
     // ================================================================================================
@@ -24,12 +25,12 @@ class Model {
         const parsed = JSON.parse(unparsed);
         if (!parsed) return;
         parsed.forEach((favCol) => this.#state.savedColors.push(favCol));
-        // console.log(`Logic.#state.savedColors:`, this.#state.savedColors);
     }
 
     // ================================================================================================
 
     pushNewFavColor(hexString) {
+        if (this.#state.savedColors.includes(hexString)) return;
         this.#state.savedColors.push(hexString);
         localStorage.setItem("savedColors", JSON.stringify(this.#state.savedColors));
     }
@@ -56,6 +57,7 @@ class Model {
 
     // ================================================================================================
 
+    // checks if this value which is a word is one of the html colors
     checkHtmlColor(value) {
         const htmlColors = this.getAllHtmlColors();
         const valueFormatted = value.trim().toLowerCase();
@@ -77,7 +79,6 @@ class Model {
 
         // const index = foundFamily.map((el) => el.toLowerCase()).indexOf(value);
         // foundFamily.splice(index, 1); // removing 'value' (because it is already rendered)
-
         return foundFamily;
     }
 
@@ -211,6 +212,8 @@ class Model {
     // ================================================================================================
 
     async fetchColors(hexOrRgbString, type, mode, resultsNum) {
+        // I don't necessarily need try-catch here because the calling code (in the Controller) handles all errors
+        // and the fetchColors method in the module already has its own try-catch block to handle and log errors.
         const data = await fetchColors(hexOrRgbString, type, mode, resultsNum);
         return data;
     }
@@ -224,6 +227,49 @@ class Model {
             return [hex, rgb];
         });
         return result;
+    }
+
+    // ================================================================================================
+
+    // convert all HTML colors to RGBs
+    convertHtmlColors() {
+        this.getAllHtmlColors().forEach((htmlCol) => {
+            this.#state.htmlColorsAsRgb[htmlCol] = this.convertToRgb(htmlCol);
+        });
+    }
+
+    // ================================================================================================
+
+    // checks if this value, which is a HEX or RGB color, an existing HTML color
+    checkExistingHtmlColor(value) {
+        if (!value.startsWith("rgb(") && !value.startsWith("#")) return null;
+
+        let pureRgb;
+        if (value.startsWith("#")) {
+            pureRgb = this.convertToRgb(value); // if it is HEX, convert it to RGB
+        } else {
+            pureRgb = value
+                .slice(4, -1)
+                .split(",")
+                .map((x) => x.trim())
+                .join(", "); // extracting pure RGB values
+            pureRgb = `rgb(${pureRgb})`;
+        }
+
+        const htmlRgbs = Object.values(this.#state.htmlColorsAsRgb); // only rgb values, array
+        const htmlNames = Object.keys(this.#state.htmlColorsAsRgb);
+
+        const index = htmlRgbs.findIndex((el) => el === pureRgb);
+        if (index < 0) return false;
+        else return htmlNames[index];
+    }
+
+    // ================================================================================================
+
+    removeFromFavorites(hexString) {
+        const index = this.#state.savedColors.findIndex((savedColor) => savedColor === hexString);
+        this.#state.savedColors.splice(index, 1);
+        localStorage.setItem("savedColors", JSON.stringify(this.#state.savedColors));
     }
 
     // ================================================================================================
