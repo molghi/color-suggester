@@ -7,7 +7,7 @@ function handleFormSubmit(handler) {
     Visual.formEl.addEventListener("submit", (e) => {
         e.preventDefault();
         const value = Visual.inputEl.value;
-        Visual.clearInput();
+        Visual.clearInput(); // clearing the input field
         handler(value);
     });
 }
@@ -18,19 +18,19 @@ function handleFormSubmit(handler) {
 function handleFormBtns(handler) {
     Visual.formBtnsBox.addEventListener("click", (e) => {
         if (!e.target.classList.contains("form__btn")) return;
-        const btnClicked = e.target.classList.contains("form__btn--random") ? "random" : "faves";
+        const btnClicked = e.target.classList.contains("form__btn--random") ? "random" : "faves"; // defining the type of the clicked btn
         handler(btnClicked);
     });
 }
 
 // ================================================================================================
 
-// handle adding a color to Your Favorites
+// handle adding a color to Your Favorites (or removing)
 function handleMarkingFavorite(handler) {
     Visual.containerEl.addEventListener("click", (e) => {
         if (!e.target.closest(".result__color-btn--save")) return;
-        const clickedElementHex = e.target.closest(".result").dataset.hex;
-        const result = e.target.closest(".result");
+        const clickedElementHex = e.target.closest(".result").dataset.hex; // getting the hex value
+        const result = e.target.closest(".result"); // getting the entire element
         handler(clickedElementHex, result);
     });
 }

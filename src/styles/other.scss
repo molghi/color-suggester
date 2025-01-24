@@ -15,6 +15,7 @@
 
 .error {
     font-style: initial;
+    background-color: #000;
     border: 2px solid red;
     font-size: 18px;
     box-shadow: 0 0 10px red;
@@ -34,5 +35,53 @@
                 color: var(--accent);
             }
         }
+    }
+}
+
+// ================================================================================================
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: initial;
+    }
+    30% {
+        transform: scale(1.5);
+        opacity: 1 !important;
+    }
+    100% {
+        transform: scale(1);
+        opacity: initial;
+    }
+}
+
+// ================================================================================================
+
+@keyframes pulse2 {
+    0% {
+        opacity: 0;
+        transform: scale(1);
+        opacity: initial;
+    }
+    30% {
+        transform: scale(1.1);
+        opacity: 1 !important;
+    }
+    100% {
+        transform: scale(1);
+        opacity: initial;
+    }
+}
+
+// ================================================================================================
+
+@keyframes reveal {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
     }
 }

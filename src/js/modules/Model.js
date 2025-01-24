@@ -1,9 +1,10 @@
 import htmlColors from "./model-dependencies/HTML_colors.js";
-import { fetchColors } from "./model-dependencies/api.js";
+import fetchColors from "./model-dependencies/api.js";
+import { convertToRgb, convertToHex } from "./model-dependencies/colorConvertions.js";
 
 class Model {
     #state = {
-        usualColorNames: ["gray", "rose", "peach", "bronze", "amber", "rust"],
+        usualColorNames: ["gray", "rose", "peach", "bronze", "amber", "rust", "blood", "sky", "grass", "sun", "wood"],
         savedColors: [],
         currentInput: "",
         htmlColorsAsRgb: {},
@@ -14,12 +15,17 @@ class Model {
 
     // ================================================================================================
 
+    getState = () => this.#state;
+
+    getSavedColors = () => this.#state.savedColors;
+
     setCurrentInput = (value) => (this.#state.currentInput = value);
 
     getCurrentInput = () => this.#state.currentInput;
 
     // ================================================================================================
 
+    // get from localStorage
     getFavColors() {
         const unparsed = localStorage.getItem("savedColors");
         const parsed = JSON.parse(unparsed);
@@ -29,22 +35,11 @@ class Model {
 
     // ================================================================================================
 
+    // push to state and LS
     pushNewFavColor(hexString) {
         if (this.#state.savedColors.includes(hexString)) return;
         this.#state.savedColors.push(hexString);
         localStorage.setItem("savedColors", JSON.stringify(this.#state.savedColors));
-    }
-
-    // ================================================================================================
-
-    getState() {
-        return this.#state;
-    }
-
-    // ================================================================================================
-
-    getSavedColors() {
-        return this.#state.savedColors;
     }
 
     // ================================================================================================
@@ -57,7 +52,7 @@ class Model {
 
     // ================================================================================================
 
-    // checks if this value which is a word is one of the html colors
+    // checks if this value, which is a word, is one of the html colors
     checkHtmlColor(value) {
         const htmlColors = this.getAllHtmlColors();
         const valueFormatted = value.trim().toLowerCase();
@@ -67,7 +62,7 @@ class Model {
 
     // ================================================================================================
 
-    // gets you an array of similar html colors: if 'white' was passed, all whites are returned -- returns array
+    // gets you an array of similar html colors (of the same color family): if 'white' was passed, all whites are returned, and so on -- returns an array
     getSimilarHtmlColors(value) {
         const htmlColorKeys = Object.keys(htmlColors);
         const htmlColorValues = Object.values(htmlColors);
@@ -77,44 +72,21 @@ class Model {
             return lowercased.includes(value); // returning that color family that contains 'value'
         });
 
-        // const index = foundFamily.map((el) => el.toLowerCase()).indexOf(value);
-        // foundFamily.splice(index, 1); // removing 'value' (because it is already rendered)
         return foundFamily;
     }
 
     // ================================================================================================
 
-    // converting color to RGB
+    // converting color (HEX or HTML color) to RGB
     convertToRgb(color) {
-        // mimicking the DOM addition and reading the computed color
-        const element = document.createElement("div");
-        document.body.appendChild(element);
-        element.style.color = color;
-        const computedColor = window.getComputedStyle(element).color;
-        document.body.removeChild(element);
-        return computedColor;
+        return convertToRgb(color);
     }
 
     // ================================================================================================
 
     // coverting RGB to HEX: input must formatted like: 'rgb(0, 0, 128)'
     convertToHex(rgbColor) {
-        const rgbMatch = rgbColor.match(/rgb\((\d+), (\d+), (\d+)\)/); // This regular expression matches the structure of the RGB string. The result of match() is an array where: rgbMatch[1] is the red value, rgbMatch[2] is the green value, rgbMatch[3] is the blue value.
-        if (rgbMatch) {
-            // If the match exists, extracting the RGB values and converting them to integers:
-            const r = parseInt(rgbMatch[1], 10);
-            const g = parseInt(rgbMatch[2], 10);
-            const b = parseInt(rgbMatch[3], 10);
-
-            // The RGB values are converted into a single hexadecimal value:
-            const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b) // Bitwise Operations: The bitwise shifts (<<) are used to place the RGB values at the correct positions in a 24-bit value, facilitating their conversion into hexadecimal.
-                .toString(16) // converts the integer into a hexadecimal string
-                .slice(1) // removes the leading "1" (from 1 << 24), leaving only the colour part
-                .toUpperCase()}`;
-
-            return hex;
-        }
-        return null;
+        return convertToHex(rgbColor);
     }
 
     // ================================================================================================
@@ -122,6 +94,7 @@ class Model {
     // checking if the input was valid hex color
     checkValidHex(hexString) {
         if (hexString.length < 4 || hexString.length > 7) return false;
+
         return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(hexString);
         /* Explanation:
     Regular Expression:
@@ -160,7 +133,7 @@ class Model {
 
     // ================================================================================================
 
-    // returns array: hex and rgb
+    // get hex and rgb of the passed html color
     getHexAndRgb(htmlColorStr) {
         const colorRGB = this.convertToRgb(htmlColorStr);
         const colorHEX = this.convertToHex(colorRGB);
@@ -169,6 +142,7 @@ class Model {
 
     // ================================================================================================
 
+    // get a selection of colors similar to 'rgbColor' (no API involved)
     getCloseRgbColors(rgbColor, amount = 10) {
         const pureRgbValues = rgbColor
             .slice(4, -1)
@@ -182,10 +156,13 @@ class Model {
         const colors = [];
         const amountOfColors = amount;
 
-        // Generate 10 colours close to the original
+        // helper tools
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max); // Helper function to clamp the values within 0-255 range
-        const getRandomOffset = () => Math.floor(Math.random() * 41) - 20; // Helper function to generate random offset: Random number between -20 and 20
+        const step = 80; // Subtracting (-step) centres the range around 0 (making it -step to step).
+        const multiplier = step * 2 + 1; // The multiplier (101) sets the total range (from 0 to 100).
+        const getRandomOffset = () => Math.floor(Math.random() * multiplier) - step; // Helper function to generate random offset: Random number between -step and step
 
+        // generating a certain amount of colours close to the original
         for (let i = 0; i < amountOfColors; i++) {
             const r = clamp(pureRgb.r + getRandomOffset(), 0, 255);
             const g = clamp(pureRgb.g + getRandomOffset(), 0, 255);
@@ -198,7 +175,7 @@ class Model {
 
     // ================================================================================================
 
-    // returns a string
+    // get a random color -- returns a string
     getRandomRGBColor() {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
@@ -211,6 +188,7 @@ class Model {
 
     // ================================================================================================
 
+    // perform an API request
     async fetchColors(hexOrRgbString, type, mode, resultsNum) {
         // I don't necessarily need try-catch here because the calling code (in the Controller) handles all errors
         // and the fetchColors method in the module already has its own try-catch block to handle and log errors.
@@ -220,6 +198,7 @@ class Model {
 
     // ================================================================================================
 
+    // filter the received API response
     filterApiResult(obj) {
         const result = obj.colors.map((colorObj) => {
             const hex = colorObj.hex.value;
@@ -266,6 +245,7 @@ class Model {
 
     // ================================================================================================
 
+    // removing from Favorites in state and LS
     removeFromFavorites(hexString) {
         const index = this.#state.savedColors.findIndex((savedColor) => savedColor === hexString);
         this.#state.savedColors.splice(index, 1);
